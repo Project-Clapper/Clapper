@@ -6,25 +6,23 @@ import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
 import './App.css';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
+    <>
       <Navbar />
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            <HomePage />
-          </Route>
-          <Route exact path="/signin">
-            <SignInPage />
-          </Route>
-          <Route exact path="/signup">
-            <SignUpPage />
-          </Route>
-        </Switch>
-      </Router>
-    </div>
+      <Switch>
+        <Route exact path="/">
+          <HomePage />
+        </Route>
+        <Route exact path="/signin">
+          <SignInPage />
+        </Route>
+        <Route exact path="/signup">
+          <SignUpPage />
+        </Route>
+      </Switch>
+    </>
   );
-}
+};
 
 export default App;
