@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from 'express';
 import { urlencoded, json } from 'body-parser';
 import authRouter from './routes/auth.route';
@@ -5,6 +6,12 @@ import authRouter from './routes/auth.route';
 const app = express();
 const port = process.env.PORT;
 
+const corsOptions = {
+  origin: '*',
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(urlencoded({ extended: false }));
 app.use(json());
 
