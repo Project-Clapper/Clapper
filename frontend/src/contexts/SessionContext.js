@@ -1,23 +1,22 @@
-import axios from 'axios';
-import { createContext, useCallback, useContext, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import { me, signIn, signUp } from '../api/auth.api';
 
 const SessionContext = createContext();
 
 export const SessionProvider = ({ children }) => {
+  const history = useHistory();
   const [user, setUser] = useState(null);
   const [isLoading, setLoading] = useState(false);
-  const [, setCookie, removeCookie] = useCookies(['tokens']);
+  const [cookie, setCookie, removeCookie] = useCookies(['token']);
 
-  const handleSignIn = useCallback(
-    async (username, password) => {
+  const handleSignUp = useCallback(
+    async (email, username, password) => {
       setLoading(true);
-      await axios
-        .post(`${process.env.REACT_APP_API_ENDPOINT}auth/signin`, { username, password })
-        .then((res) => {
-          console.log(res.data);
-          setUser(username);
-          setCookie(res.data);
+      await signUp(email, username, password)
+        .then(() => {
+          history.push('/signin');
         })
         .catch((error) => {
           throw error;
@@ -26,8 +25,46 @@ export const SessionProvider = ({ children }) => {
           setLoading(false);
         });
     },
-    [setCookie]
+    [history]
   );
+
+  const handleSignIn = useCallback(
+    async (username, password) => {
+      setLoading(true);
+      await signIn(username, password)
+        .then(({ data }) => {
+          setUser(data.user[0]);
+          setCookie('token', data.idToken);
+          history.push('/');
+        })
+        .catch((error) => {
+          throw error;
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    },
+    [history, setCookie]
+  );
+
+  const handleSignOut = useCallback(async () => {
+    removeCookie('token', { maxAge: 86400 });
+    setUser(null);
+    history.push('/');
+  }, [removeCookie]);
+
+  useEffect(() => {
+    setLoading(true);
+    const { token } = cookie;
+    const queryMe = async () => {
+      try {
+        const { data: user } = await me(token);
+        setUser(user);
+      } catch ({ message }) {}
+      setLoading(false);
+    };
+    queryMe();
+  }, [cookie]);
 
   return (
     <SessionContext.Provider
@@ -35,7 +72,8 @@ export const SessionProvider = ({ children }) => {
         isLoading,
         user,
         signIn: handleSignIn,
-        // logout: handleLogout,
+        signUp: handleSignUp,
+        signOut: handleSignOut,
       }}
     >
       {children}
