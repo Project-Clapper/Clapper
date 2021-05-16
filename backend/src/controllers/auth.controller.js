@@ -77,11 +77,21 @@ const signIn = async (req, res) => {
     const cognitoUser = new CognitoUser({ Username: username, Pool: userPool });
 
     cognitoUser.authenticateUser(authDetails, {
-      onSuccess: (result) => {
+      onSuccess: async (result) => {
         const accessToken = result.getAccessToken().getJwtToken();
         const idToken = result.getIdToken().getJwtToken();
         const refreshToken = result.getRefreshToken().getToken();
-        res.status(200).json({ accessToken, idToken, refreshToken });
+
+        const params = {
+          TableName: 'ClapperUser',
+          FilterExpression: 'username = :username',
+          ExpressionAttributeValues: {
+            ':username': username,
+          },
+        };
+        const { Items } = await dynamoClient.scan(params).promise();
+
+        res.status(200).json({ accessToken, idToken, refreshToken, user: Items });
       },
       onFailure: (error) => {
         console.log(error);
