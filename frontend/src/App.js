@@ -7,6 +7,8 @@ import SignUpPage from './pages/SignUpPage';
 import ProfilePage from './pages/ProfilePage';
 import SettingPage from './pages/SettingPage';
 import CreatePage from './pages/CreatePage';
+import CommunityPage from './pages/CommunityPage';
+import PostPage from './pages/PostPage';
 import './App.css';
 
 const App = () => {
@@ -31,6 +33,12 @@ const App = () => {
         </Route>
         <Route exact path="/create">
           <CreatePage />
+        </Route>
+        <Route exact path="/create-community">
+          <CommunityPage />
+        </Route>
+        <Route exact path="/post">
+          <PostPage />
         </Route>
       </Switch>
     </>

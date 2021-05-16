@@ -61,6 +61,29 @@ const CreatePage = () => {
                 ></textarea>
               </div>
             </div>
+            <div className="text-sm">
+              <div className="relative">
+                <div className="rounded border-2 border-gray-600 relative bg-gray-900">
+                  <div className="min-h-full resize-y">
+                    <textarea
+                      className="text-gray-200 pt-2 pr-16 pl-4 border-gray-600 resize-y box-border block w-full bg-gray-900 rounded h-9 items-center h-full"
+                      placeholder="Text"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="items-start flex-row justify-between pt-0 pr-4 pb-4 pl-4 flex">
+            <div className="relative">
+              <div className="flex-row-reverse flex items-center">
+                <div className="w-20 ml-2 flex box-border">
+                  <button className="grayscale-0 bg-gray-400 text-gray-900 rounded-full w-20 font-bold">
+                    Post
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

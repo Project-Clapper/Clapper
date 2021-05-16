@@ -101,7 +101,7 @@ const Navbar = () => {
                       >
                         <Menu.Items
                           static
-                          className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                          className="z-10 origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                         >
                           <Menu.Item>
                             {({ active }) => (
@@ -119,7 +119,7 @@ const Navbar = () => {
                           </Menu.Item>
                           <Menu.Item>
                             {({ active }) => (
-                              <Link to="/settings">
+                              <Link to="/setting">
                                 <p
                                   className={classNames(
                                     active ? 'bg-gray-100' : '',

@@ -85,7 +85,7 @@ const ProfilePage = () => {
             </div>
           </div>
           <div className="w-1/3 pl-3">
-            <div className="bg-gray-800 relative">
+            <div className="bg-gray-800 relative z-0">
               <div className="rounded overflow-visible break-words p-3">
                 <div className="h-24 left-0 top-0 w-full bg-gray-300 absolute">
                   <div className="h-full relative w-full">

@@ -1,9 +1,8 @@
 import { ArrowSmDownIcon, ArrowSmUpIcon, ChatAltIcon } from '@heroicons/react/outline';
 import React from 'react';
 import '../styles/HomePageStyle.css';
-import { NavLink } from 'react-router-dom';
 
-const HomePage = () => {
+const PostPage = () => {
   return (
     <div className="bg-black">
       <div className="container mx-auto content-with-navbar">
@@ -79,9 +78,58 @@ const HomePage = () => {
                     </div>
                     <div className="text-sm mt-2 text-gray-400 cursor-pointer hover:bg-gray-300 w-32 pl-2">
                       <ChatAltIcon className=" inline w-4 h-4 my-auto " />
-                      <NavLink to="/post" className="ml-1 inline">
-                        17 comments
-                      </NavLink>
+                      <p className="ml-1 inline">17 comments</p>
+                    </div>
+                    <div className="mt-6 mr-10 mb-6 ml-12 relative">
+                      <div className="mb-1">
+                        <span className="text-xs font-normal leading-4 text-gray-400 mr-1">
+                          Comment as{' '}
+                          <a className="text-xs font-normal leading-4 text-red-500">
+                            Namesomething
+                          </a>
+                        </span>
+                      </div>
+                      <div className="rounded relative">
+                        <textarea
+                          className="text-gray-200 pt-2 pr-16 pl-4 border-gray-600 resize-y box-border block w-full bg-gray-800 rounded h-9 items-center h-full"
+                          placeholder="Text"
+                        ></textarea>
+                      </div>
+                    </div>
+                    <div className="box-border pr-4 mt-4 mr-4 mb-0 ml-2 pb-4 p-2">
+                      <div>
+                        <div className="relative">
+                          <div className="p-0">
+                            <div>
+                              <div className="pl-4 box-border relative w-full">
+                                <div className="absolute bottom-0 left-0 top-0 z-2">
+                                  <div className="box-border inline-block h-full align-top">
+                                    <div className="h-full bottom-0 absolute box-border inline-block ml-1 align-top w-4"></div>
+                                  </div>
+                                </div>
+                                <div className="mt-4 flex -ml-6 pt-2 pr-1 pb-0 pl-0 relative">
+                                  <div className="self-start inline-block flex-grow-0 flex-shrink-0">
+                                    <div className="flex">
+                                      <img
+                                        className="h-5 w-5 rounded-full"
+                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                                        alt=""
+                                      />
+                                      <p className="ml-2 text-sm text-gray-400">
+                                        <span className="font-semibold underline text-gray-200 cursor-pointer">
+                                          t/whatisusername
+                                        </span>
+                                        <span> - 4 hours ago</span>
+                                      </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="mt-2 text-gray-100">Nice</p>
                     </div>
                   </div>
                 </div>
@@ -97,4 +145,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default PostPage;

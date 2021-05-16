@@ -1,28 +1,38 @@
 import React from 'react';
 
-const SettingPage = () => {
+const CommunityPage = () => {
   return (
     <div className="bg-black">
       <div className="container mx-auto content-with-navbar">
         <div className="max-w-2xl flex-grow flex-shrink">
-          <h2 className="text-xl font-medium leading-6 text-gray-200 p-8">Edit your profile</h2>
+          <h2 className="text-xl font-medium leading-6 text-gray-200 p-8">Create a community</h2>
           <h3 className="text-xs font-bold leading-3 text-gray-600 border-b-2 border-gray-600 mb-8 pb-1">
-            Profile Info
+            Community Info
           </h3>
           <div className="flex-col flex mb-8">
             <div className="flex flex-col mr-2 max-w-full">
               <h3 className="text-base font-medium leading-5 text-gray-200 flex mb-1">
-                Bio (Optional)
+                Community Name
               </h3>
               <p className="font-normal text-gray-600 text-xs leading-4">
-                Describe yourself and show it on your profile
+                Tell everyone to know your community name
               </p>
             </div>
             <div className="items-start mt-3 flex-col flex-grow justify-end flex">
-              <textarea
-                placeholder="Describe yourself"
-                className="resize bg-black border border-gray-700 rounded box-border block w-full p-2"
-              ></textarea>
+              <textarea className="bg-black border border-gray-700 rounded box-border block w-full p-2 resize-none"></textarea>
+            </div>
+          </div>
+          <div className="flex-col flex mb-8">
+            <div className="flex flex-col mr-2 max-w-full">
+              <h3 className="text-base font-medium leading-5 text-gray-200 flex mb-1">
+                Description
+              </h3>
+              <p className="font-normal text-gray-600 text-xs leading-4">
+                Tell more about your community.
+              </p>
+            </div>
+            <div className="items-start mt-3 flex-col flex-grow justify-end flex">
+              <textarea className="bg-black border border-gray-700 rounded box-border block w-full p-2 resize-y"></textarea>
             </div>
           </div>
           <h3 className="text-xs font-bold leading-3 text-gray-600 border-b-2 border-gray-600 mb-8 pb-1">
@@ -31,7 +41,7 @@ const SettingPage = () => {
           <div className="flex-col flex mb-8">
             <div className="flex flex-col mr-2 max-w-full">
               <h3 className="text-base font-medium leading-5 text-gray-200 flex mb-1">
-                Profile and Banner image
+                Community Profile and Banner image
               </h3>
               <p className="font-normal text-gray-600 text-xs leading-4">
                 Image must be .jpg or .png format
@@ -92,14 +102,14 @@ const SettingPage = () => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="items-start flex-row justify-between pt-0 pr-4 pb-4 flex">
-          <div className="relative">
-            <div className="flex-row-reverse flex items-center">
-              <div className="w-20 ml-2 flex box-border">
-                <button className="grayscale-0 bg-gray-400 text-gray-900 rounded-full w-20 font-bold">
-                  Save
-                </button>
+          <div className="items-start flex-row justify-between pt-0 pr-4 pb-4 flex">
+            <div className="relative">
+              <div className="flex-row-reverse flex items-center">
+                <div className="w-20 ml-2 flex box-border">
+                  <button className="grayscale-0 bg-gray-400 text-gray-900 rounded-full w-20 font-bold">
+                    Create
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -109,4 +119,4 @@ const SettingPage = () => {
   );
 };
 
-export default SettingPage;
+export default CommunityPage;
