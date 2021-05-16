@@ -2,9 +2,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import useModal from '../hooks/useModal';
 import { useSession } from '../contexts/SessionContext';
+import Spiner from '../components/Spiner';
 
 const SignInPage = () => {
-  const { signIn } = useSession();
+  const { signIn, isLoading } = useSession();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const { toggle, ModalElement, updateModalAndToggle } = useModal();
@@ -37,6 +38,11 @@ const SignInPage = () => {
         await signIn(username, password);
       } catch (error) {
         const { message } = error.response.data;
+        if (message === 'User is not confirmed.')
+          return handleErrorMessage(
+            'Please try agian',
+            'Account is not verify yet. Please check your email'
+          );
         handleErrorMessage('Please try agian', message);
       }
     },
@@ -75,11 +81,15 @@ const SignInPage = () => {
             </div>
 
             <div className="mt-16">
-              <div className="flex justify-center items-center">
+              <div className="flex justify-center">
                 <div>
-                  <button className="w-full font-semibold bg-transparent hover:border-gray-500 py-2 px-4 border-2 border-gold-500 hover:border-transparent rounded">
-                    Sign in
+                  <button className="inline-block w-full font-semibold bg-transparent hover:border-gray-500 py-2 px-4 border-2 border-gold-500 hover:border-transparent rounded">
+                    <div className="flex justify-center">
+                      <p className="mx-auto">Sign in</p>
+                      {isLoading ? <Spiner /> : ''}
+                    </div>
                   </button>
+
                   <div className="text-sm text-center mt-5 block">
                     New to Clapper? {''}
                     <NavLink to="/signup" className="underline text-gray-200">
