@@ -9,6 +9,7 @@ import SettingPage from './pages/SettingPage';
 import CreatePage from './pages/CreatePage';
 import CommunityPage from './pages/CommunityPage';
 import PostPage from './pages/PostPage';
+import Community from './pages/Community';
 import './App.css';
 
 const App = () => {
@@ -39,6 +40,9 @@ const App = () => {
         </Route>
         <Route exact path="/post">
           <PostPage />
+        </Route>
+        <Route exact path="/community">
+          <Community />
         </Route>
       </Switch>
     </>
