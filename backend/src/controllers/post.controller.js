@@ -123,4 +123,17 @@ const getPostFromId = async (req, res) => {
   }
 };
 
-export { createPost, votePost, getPostFromId };
+const getPosts = async (req, res) => {
+  try {
+    const params = {
+      TableName: 'ClapperPost',
+    };
+    const { Items } = await dynamoClient.scan(params).promise();
+    res.status(200).json(Items);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
+  }
+};
+
+export { createPost, votePost, getPostFromId, getPosts };
