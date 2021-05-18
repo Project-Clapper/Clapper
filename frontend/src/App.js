@@ -42,7 +42,7 @@ const App = () => {
         <Route exact path="/create-community">
           <CommunityPage />
         </Route>
-        <Route exact path="/post">
+        <Route exact path="/c/:communityName/:postTitle">
           <PostPage />
         </Route>
         <Route path="/c">
