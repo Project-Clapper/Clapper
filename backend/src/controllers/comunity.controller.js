@@ -104,19 +104,19 @@ const joinCommunity = async (req, res) => {
     const { clientId, communityId, communityName } = req.body;
 
     // add to community table
-    const user = {
-      clientId,
-      // username,
-      // profileImage,
-      // joinAt: new Date().toISOString(),
-    };
+    // const user = {
+    // clientId,
+    // username,
+    // profileImage,
+    // joinAt: new Date().toISOString(),
+    // };
 
     const params = {
       TableName: 'ClapperCommunity',
       Key: { communityId },
       UpdateExpression: 'SET followers = list_append(followers, :attrValue)',
       ExpressionAttributeValues: {
-        ':attrValue': [user],
+        ':attrValue': [clientId],
       },
     };
     await dynamoClient.update(params).promise();

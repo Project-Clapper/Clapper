@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useHistory, useLocation } from 'react-router-dom';
 import { getCommunityByName, joinCommunity } from '../api/community.api';
 import Post from '../components/Post';
 import Spiner from '../components/Spiner';
@@ -12,6 +12,7 @@ const Community = () => {
   const [community, setCommunity] = useState();
   const [posts, setPosts] = useState();
   const location = useLocation();
+  const history = useHistory();
 
   const renderPost = () => {
     if (posts.length === 0)
@@ -29,10 +30,11 @@ const Community = () => {
   const handleJoinCommunity = useCallback(async () => {
     try {
       await joinCommunity(user?.clientId, community?.communityId, community?.name);
+      history.go(0);
     } catch (error) {
       console.log(error);
     }
-  }, [community?.communityId, community?.name, user?.clientId]);
+  }, [community?.communityId, community?.name, history, user?.clientId]);
 
   const renderCommunityOptions = () => {
     const { followers } = community;
