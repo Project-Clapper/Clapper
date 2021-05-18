@@ -1,7 +1,17 @@
-import { ArrowSmDownIcon, ArrowSmUpIcon, ChatAltIcon } from '@heroicons/react/outline';
-import React from 'react';
+import {
+  ArrowSmDownIcon,
+  ArrowSmUpIcon,
+  ChatAltIcon,
+  SearchCircleIcon,
+  SearchIcon,
+} from '@heroicons/react/outline';
+import React, { useState } from 'react';
 import '../styles/HomePageStyle.css';
 import { NavLink } from 'react-router-dom';
+
+import { Fragment } from 'react';
+import { Listbox, Transition } from '@headlessui/react';
+import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 
 const HomePage = () => {
   return (
@@ -10,8 +20,20 @@ const HomePage = () => {
         <div className="flex flex-row pt-6">
           <div className="w-2/3 pr-3">
             <div>
+              {/* <div className="flex bg-gray-800 mb-4 p-2">
+                <form>
+                  <div>
+                    <SearchIcon className="h-8 w-8 text-white my-auto" />
+                  </div>
+                  <input
+                    type="text"
+                    className="bg-gray-700 h-9 ml-2 mr-2 py-0 px-4 w-full"
+                    placeholder="Search Community"
+                  />
+                </form>
+              </div> */}
               <div className="flex bg-gray-800 mb-4 p-2">
-                <span className="py-0 px-4">
+                <span className="my-auto">
                   <img
                     className="h-8 w-8 rounded-full"
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
@@ -20,11 +42,10 @@ const HomePage = () => {
                 </span>
                 <input
                   type="text"
-                  className="bg-gray-700 h-9 mr-2 py-0 px-4 w-full"
+                  className="bg-gray-700 h-9 ml-2 mr-2 py-0 px-4 w-full"
                   placeholder="Create Post"
                 />
               </div>
-
               <div className="mt-6 border-solid w-full bg-gray-800">
                 <div className="flex">
                   <div className="w-10 p-2 bg-gray-800">
