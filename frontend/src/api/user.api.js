@@ -10,4 +10,8 @@ const updateUser = (clientId, profileImage, bannerImage) => {
   return axios.post(`${api_endpoint}user/update`, { clientId, profileImage, bannerImage });
 };
 
-export { userCommunities, updateUser };
+const getUserPost = (clientId) => {
+  return axios.get(`${api_endpoint}user/post?clientId=${clientId}`);
+};
+
+export { userCommunities, updateUser, getUserPost };

@@ -19,7 +19,11 @@ const votePost = (postId, clientId, vote) => {
 };
 
 const getPostFromId = (postId) => {
-  return axios.get(`${api_endpoint}post/get?postId=${postId}`);
+  return axios.get(`${api_endpoint}post/getUserPost?postId=${postId}`);
 };
 
-export { createPost, votePost, getPostFromId };
+const getPosts = () => {
+  return axios.get(`${api_endpoint}post/get`);
+};
+
+export { createPost, votePost, getPostFromId, getPosts };
