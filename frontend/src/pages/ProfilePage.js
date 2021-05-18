@@ -1,7 +1,18 @@
 import { ArrowSmDownIcon, ArrowSmUpIcon, ChatAltIcon } from '@heroicons/react/outline';
 import React from 'react';
+import Spiner from '../components/Spiner';
+import { useSession } from '../contexts/SessionContext';
 
 const ProfilePage = () => {
+  const { user, isLoading } = useSession();
+
+  if (isLoading)
+    return (
+      <div className="bg-black h-screen pt-4">
+        <Spiner />
+      </div>
+    );
+
   return (
     <div className="bg-black">
       <div className="container mx-auto content-with-navbar">
@@ -11,8 +22,8 @@ const ProfilePage = () => {
               <div className="flex bg-gray-800 mb-4 p-2">
                 <span className="py-0 px-4">
                   <img
-                    className="h-8 w-8 rounded-full"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                    className="h-8 w-8 rounded-full object-cover"
+                    src={user.profileImage.location}
                     alt=""
                   />
                 </span>
@@ -34,8 +45,8 @@ const ProfilePage = () => {
                     <div className="p-2">
                       <div className="flex">
                         <img
-                          className="h-5 w-5 rounded-full"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                          className="h-5 w-5 object-cover rounded-full"
+                          src={user.profileImage.location}
                           alt=""
                         />
                         <p className="ml-2 text-sm text-gray-400">
@@ -118,18 +129,12 @@ const ProfilePage = () => {
                     </label>
                   </div>
                 </div>
-                <div className="rounded bg-white box-border h-20 -ml-1 mt-4 p-1 relative w-20">
-                  <div className="h-full w-full relative">
-                    <label>
-                      <span className="h-full w-full">
-                        <img
-                          className="rounded"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
-                        />
-                      </span>
-                    </label>
-                  </div>
+                <div className="rounded box-border h-20 -ml-1 mt-4  relative w-20">
+                  <img
+                    className="h-20 w-20 object-cover border-2 border-white"
+                    src={user.profileImage.location}
+                    alt=""
+                  />
                 </div>
                 <a className="text-xs font-medium leading-4 text-white mt-1">t/whatisusername</a>
                 <div className="flex flex-wrap mt-3">
