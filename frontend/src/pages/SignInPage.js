@@ -37,6 +37,7 @@ const SignInPage = () => {
       try {
         await signIn(username, password);
       } catch (error) {
+        console.log(error);
         const { message } = error?.response?.data;
         if (message === 'User is not confirmed.')
           return handleErrorMessage(

@@ -43,7 +43,15 @@ const CreatePage = () => {
 
       try {
         const { clientId, username, profileImage } = user;
-        await createPost(title, body, clientId, username, profileImage, selectCommunity);
+        await createPost(
+          title,
+          body,
+          clientId,
+          username,
+          profileImage,
+          selectCommunity,
+          communityName
+        );
         history.push(`c/${communityName}`);
       } catch (error) {
         setErrorMessage(error.message);

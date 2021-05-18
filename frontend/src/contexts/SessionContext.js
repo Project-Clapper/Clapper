@@ -38,6 +38,7 @@ export const SessionProvider = ({ children }) => {
           history.push('/');
         })
         .catch((error) => {
+          console.log(error);
           throw error;
         })
         .finally(() => {
