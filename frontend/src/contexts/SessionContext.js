@@ -51,7 +51,7 @@ export const SessionProvider = ({ children }) => {
     removeCookie('token', { maxAge: 86400 });
     setUser(null);
     history.push('/');
-  }, [removeCookie]);
+  }, [history, removeCookie]);
 
   useEffect(() => {
     setLoading(true);
@@ -67,7 +67,7 @@ export const SessionProvider = ({ children }) => {
       setLoading(false);
     };
     queryMe();
-  }, [cookie]);
+  }, [cookie, removeCookie]);
 
   return (
     <SessionContext.Provider
