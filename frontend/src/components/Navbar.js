@@ -1,9 +1,10 @@
 import React, { useMemo, useState, Fragment } from 'react';
 import { Disclosure, Menu, Transition } from '@headlessui/react';
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline';
+import { MenuIcon, XIcon } from '@heroicons/react/outline';
 import { useLocation } from 'react-router';
 import { Link, NavLink } from 'react-router-dom';
 import { useSession } from '../contexts/SessionContext';
+import { UserIcon } from '@heroicons/react/solid';
 
 const Navbar = () => {
   const { isLoading, user, signOut } = useSession();
@@ -19,12 +20,37 @@ const Navbar = () => {
   const navigation = [
     { name: 'Sign in', href: '/signin', current: false },
     { name: 'Sign up', href: '/signup', current: false },
+    { name: 'Community', href: '/community', current: false },
   ];
+
+  const navigationSignIn = [{ name: 'Community', href: '/community', current: false }];
 
   const navigationBox = () => {
     if (isLoading) return <div></div>;
 
-    if (!user)
+    if (user)
+      return (
+        <div className="flex space-x-4">
+          {navigationSignIn.map((item) => (
+            <Link to={item.href}>
+              <p
+                key={item.name}
+                className={classNames(
+                  item.current
+                    ? 'bg-gray-900 text-white'
+                    : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                  'px-3 py-2 rounded-md text-sm font-medium'
+                )}
+                aria-current={item.current ? 'page' : undefined}
+              >
+                {item.name}
+              </p>
+            </Link>
+          ))}
+        </div>
+      );
+
+    if (user === null)
       return (
         <div className="flex space-x-4">
           {navigation.map((item) => (
@@ -49,22 +75,29 @@ const Navbar = () => {
 
   const profileBox = () => {
     if (isLoading) return <div></div>;
-
+    console.log(user);
     if (user)
       return (
         <>
-          <button className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+          {/* <button className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
             <span className="sr-only">View notifications</span>
             <BellIcon className="h-6 w-6" aria-hidden="true" />
-          </button>
+          </button> */}
 
           <Menu as="div" className="ml-3 relative">
             {({ open }) => (
               <>
                 <div>
-                  <Menu.Button className="bg-gray-800 flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                  <Menu.Button className="bg-gray-800 flex text-sm border-gray-400 border-2 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                     <span className="sr-only">Open user menu</span>
-                    <img className="h-8 w-8 rounded-full" src={user.profileImage} alt="" />
+                    {user.profileImage.location && (
+                      <img
+                        className="h-8 w-8 object-cover rounded-full"
+                        src={user.profileImage.location}
+                        alt=""
+                      />
+                    )}
+                    {!user.profileImage && <UserIcon className="h-6 w-6 rounded-full" />}
                   </Menu.Button>
                 </div>
                 <Transition
