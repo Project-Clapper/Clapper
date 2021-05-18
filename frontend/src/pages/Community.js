@@ -1,25 +1,77 @@
-import { ArrowSmDownIcon, ArrowSmUpIcon, ChatAltIcon } from '@heroicons/react/outline';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { NavLink, useLocation } from 'react-router-dom';
+import { getCommunityByName } from '../api/community.api';
+import Post from '../components/Post';
+import Spiner from '../components/Spiner';
 import '../styles/HomePageStyle.css';
-import { NavLink } from 'react-router-dom';
 
 const Community = () => {
+  const [isLoading, setLoading] = useState(true);
+  const [community, setCommunity] = useState();
+  const [posts, setPosts] = useState();
+  const location = useLocation();
+
+  const renderPost = () => {
+    if (posts.length === 0)
+      return (
+        <div className="text-white text-center mt-5 font-medium">
+          Look like there is no post in this community be first one to post?
+        </div>
+      );
+
+    return posts.map((post) => {
+      return <Post post={post} />;
+    });
+  };
+
+  useEffect(() => {
+    const { pathname } = location;
+    const communityName = pathname.slice(3, pathname.length);
+
+    setLoading(true);
+    const fetchCommunity = async () => {
+      const { data } = await getCommunityByName(communityName);
+      setCommunity(data.community);
+      setPosts(data.posts);
+      console.log(data);
+      setLoading(false);
+    };
+    fetchCommunity();
+  }, [location]);
+
+  if (isLoading) {
+    return (
+      <div className="bg-black h-screen pt-4">
+        <Spiner />
+      </div>
+    );
+  }
+
   return (
     <div className="bg-black">
       <div className="flex-grow-0 flex-shrink-0 relative top-0 left-0 right-0 p-0 bg-gray-800">
-        <span className="h-48 pt-2 pr-4 pb-2 pl-4 block flex-row mr-auto ml-auto bg-hero-pattern"></span>
+        {/* <span className="h-48 pt-2 pr-4 pb-2 pl-4 block flex-row mr-auto ml-auto"> */}
+        <img
+          src={community.banner.location}
+          className="h-48 pt-2 pr-4 pb-2 pl-4 block flex-row mr-auto ml-auto object-cover w-full"
+          alt=""
+        />
+        {/* </span> */}
         <div className="max-w-5xl flex flex-col justify-between pr-4 pl-6 bg-gray-800 mx-auto">
           <div className="items-start flex mb-3 -mt-3">
             <img
-              src="https://ypn.poetrysociety.org.uk/wp-content/uploads/fry-meme.jpg"
+              src={community.image.location}
               className="border-4 border-gray-200 inline-block h-20 w-20"
+              alt=""
             />
             <div className="box-border inline-flex flex-grow flex-shrink pl-4 mt-6 relative">
               <div className="inline-block box-border">
                 <h1 className="flex text-2xl font-bold leading-8 pr-1 pb-1 w-full text-gray-50">
-                  memes
+                  {community.name}
                 </h1>
-                <h2 className="text-sm font-medium leading-5 text-gray-600 block">r/memes</h2>
+                <h2 className="text-sm font-medium leading-5 text-gray-600 block">
+                  s/{community.name}
+                </h2>
               </div>
               <div className="w-24"></div>
             </div>
@@ -30,7 +82,7 @@ const Community = () => {
         <div className="flex flex-row pt-6">
           <div className="w-2/3 pr-3">
             <div>
-              <div className="flex bg-gray-800 mb-4 p-2">
+              {/* <div className="flex bg-gray-800 mb-4 p-2">
                 <span className="py-0 px-4">
                   <img
                     className="h-8 w-8 rounded-full"
@@ -43,9 +95,11 @@ const Community = () => {
                   className="bg-gray-700 h-9 mr-2 py-0 px-4 w-full"
                   placeholder="Create Post"
                 />
-              </div>
+              </div> */}
 
-              <div className="mt-6 border-solid w-full bg-gray-800">
+              {renderPost()}
+
+              {/* <div className="mt-6 border-solid w-full bg-gray-800">
                 <div className="flex">
                   <div className="w-10 p-2 bg-gray-800">
                     <ArrowSmUpIcon className="h-6 w-6 mx-auto text-gray-400 cursor-pointer" />
@@ -105,27 +159,21 @@ const Community = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="w-1/3 pl-3">
             <div className="bg-gray-800 relative">
-              <div className="text-xs font-bold tracking-tighter leading-3 rounded flex text-gray-400 pr-3 pl-3 pb-3">
+              <div className="text-xs font-bold tracking-tighter leading-3 rounded flex text-gray-400 pr-3 pl-3 ">
                 <div className="text-base font-medium leading-5 pt-3">
                   <h2 className="text-sm leading-5 inline">About this Community</h2>
                 </div>
               </div>
               <div className="pt-3 pr-3 pb-3 pl-3">
                 <div className="mb-2 relative">
-                  <div className="text-sm leading-5 font-normal text-gray-50">
-                    A meme (/miːm/ MEEM)[1][2][3] is an idea, behavior, or style that spreads by
-                    means of imitation from person to person within a culture and often carries
-                    symbolic meaning representing a particular phenomenon or theme.[4] A meme acts
-                    as a unit for carrying cultural ideas, symbols, or practices, that can be
-                    transmitted from one mind to another through writing, speech, gestures, rituals,
-                    or other imitable phenomena with a mimicked theme. Supporters of the concept
-                    regard memes as cultural analogues to genes in that they self-replicate, mutate,
-                    and respond to selective pressures
+                  <hr />
+                  <div className="text-sm leading-5 font-normal text-gray-50 pt-2">
+                    {community.description}
                   </div>
                 </div>
                 <div>
@@ -144,17 +192,18 @@ const Community = () => {
                         d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z"
                       />
                     </svg>
-                    Created May 18, 2021
+                    Created {community.createdAt}
                   </div>
                 </div>
                 <div className="justify-between mt-3 flex flex-row">
                   <div className="flex-shrink flex-grow">
-                    <a
+                    <NavLink
+                      to="/create"
                       className="w-full bg-gray-600 text-gray-200 rounded-full flex box-border justify-center text-sm leading-4 h-8 items-center"
                       role="button"
                     >
                       Create a Post
-                    </a>
+                    </NavLink>
                   </div>
                 </div>
               </div>
