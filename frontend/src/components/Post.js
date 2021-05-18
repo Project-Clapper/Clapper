@@ -115,11 +115,11 @@ const Post = ({ post }) => {
               {profileImage?.location && (
                 <img
                   className="h-5 w-5 object-cover rounded-full"
-                  src={profileImage.location}
+                  src={profileImage?.location}
                   alt=""
                 />
               )}
-              {!profileImage.location && <UserIcon className="h-5 w-5 rounded-full" />}
+              {!profileImage?.location && <UserIcon className="h-5 w-5 rounded-full" />}
               <p className="ml-2 text-sm text-gray-400">
                 {!location.pathname.includes('/c/') && (
                   <span className="font-semibold underline text-gray-200 cursor-pointer">

@@ -23,7 +23,7 @@ const ProfilePage = () => {
                 <span className="py-0 px-4">
                   <img
                     className="h-8 w-8 rounded-full object-cover"
-                    src={user.profileImage.location}
+                    src={user.profileImage?.location}
                     alt=""
                   />
                 </span>
@@ -46,7 +46,7 @@ const ProfilePage = () => {
                       <div className="flex">
                         <img
                           className="h-5 w-5 object-cover rounded-full"
-                          src={user.profileImage.location}
+                          src={user.profileImage?.location}
                           alt=""
                         />
                         <p className="ml-2 text-sm text-gray-400">
@@ -132,7 +132,7 @@ const ProfilePage = () => {
                 <div className="rounded box-border h-20 -ml-1 mt-4  relative w-20">
                   <img
                     className="h-20 w-20 object-cover border-2 border-white"
-                    src={user.profileImage.location}
+                    src={user.profileImage?.location}
                     alt=""
                   />
                 </div>

@@ -13,7 +13,7 @@ const CommunitiesPage = () => {
         <div key={community.communityId} className="bg-gray-800 p-5 cursor-pointer rounded w-full">
           <Link to={`c/${community.name}`}>
             <div className="flex">
-              <img src={community.image.location} className="w-20 my-auto rounded" alt="" />
+              <img src={community.image?.location} className="w-20 my-auto rounded" alt="" />
               <div className="ml-5">
                 <p className="font-semibold text-2xl">{community.name}</p>
                 <p className="text-gray-500">{community.description}</p>
