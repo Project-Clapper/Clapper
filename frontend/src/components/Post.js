@@ -167,15 +167,8 @@ const Post = ({ post }) => {
                 {commentCount} comment{commentCount !== 0 ? 's' : ''}
               </div>
             )}
-            {!location.pathname.includes(`/${communityName}/`) && (
-              <NavLink
-                to={
-                  location.pathname.includes('/c')
-                    ? `${communityName}/${postId}`
-                    : `c/${communityName}/${postId}`
-                }
-                className="ml-1 inline"
-              >
+            {!location.pathname.includes('/memes/') && (
+              <NavLink to={`c/${communityName}/${postId}`} className="ml-1 inline">
                 {commentCount} comment{commentCount !== 0 ? 's' : ''}
               </NavLink>
             )}
