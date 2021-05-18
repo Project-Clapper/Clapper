@@ -3,7 +3,7 @@ import { dynamoClient } from '../config/dynamodb.config';
 
 const createPost = async (req, res) => {
   try {
-    const { title, body, createdBy, username, profileImage, communityId } = req.body;
+    const { title, body, createdBy, username, profileImage, communityId, communityName } = req.body;
 
     console.log(profileImage);
 
@@ -17,6 +17,8 @@ const createPost = async (req, res) => {
       vote: [],
       createdAt: new Date().toISOString(),
       communityId,
+      communityName,
+      commentCount: 0,
     };
     const params = {
       TableName: 'ClapperPost',
@@ -88,4 +90,37 @@ const votePost = async (req, res) => {
   }
 };
 
-export { createPost, votePost };
+const getPostFromId = async (req, res) => {
+  try {
+    const { postId } = req.query;
+
+    const params = {
+      TableName: 'ClapperPost',
+      Key: { postId },
+    };
+    const { Item: post } = await dynamoClient.get(params).promise();
+
+    const params2 = {
+      TableName: 'ClapperComment',
+      FilterExpression: 'postId = :postId',
+      ExpressionAttributeValues: {
+        ':postId': postId,
+      },
+    };
+    const { Items: comments } = await dynamoClient.scan(params2).promise();
+    console.log(comments, postId);
+
+    const params3 = {
+      TableName: 'ClapperCommunity',
+      Key: { communityId: post.communityId },
+    };
+    const { Item: community } = await dynamoClient.get(params3).promise();
+
+    res.status(200).json({ post, comments, community });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
+  }
+};
+
+export { createPost, votePost, getPostFromId };
