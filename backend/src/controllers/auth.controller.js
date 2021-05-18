@@ -11,6 +11,7 @@ import { validatePassword, validateUsername } from '../utils/auth.utils';
 import { handleThrow } from '../utils/throw.utils';
 import jwt from 'jsonwebtoken';
 import jwkToPem from 'jwk-to-pem';
+import { v4 as uuidv4 } from 'uuid';
 
 const signUp = async (req, res) => {
   try {
@@ -49,7 +50,8 @@ const signUp = async (req, res) => {
 
       const userItem = {
         username: result.user.username,
-        clientId: result.user.pool.clientId,
+        communities: [],
+        clientId: uuidv4(),
       };
 
       const params = {
