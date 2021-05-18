@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { getCommunityByName } from '../api/community.api';
+import { getCommunityByName, joinCommunity } from '../api/community.api';
 import Post from '../components/Post';
 import Spiner from '../components/Spiner';
 import { useSession } from '../contexts/SessionContext';
@@ -26,9 +26,13 @@ const Community = () => {
     });
   };
 
-  const handleJoinCommunity = useCallback(() => {
-    console.log(1);
-  }, []);
+  const handleJoinCommunity = useCallback(async () => {
+    try {
+      await joinCommunity(user?.clientId, community?.communityId, community?.name);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [community?.communityId, community?.name, user.clientId]);
 
   const renderCommunityOptions = () => {
     const { followers } = community;
@@ -100,7 +104,7 @@ const Community = () => {
       <div className="flex-grow-0 flex-shrink-0 relative top-0 left-0 right-0 p-0 bg-gray-800">
         {/* <span className="h-48 pt-2 pr-4 pb-2 pl-4 block flex-row mr-auto ml-auto"> */}
         <img
-          src={community.banner.location}
+          src={community.banner?.location}
           className="h-48 pt-2 pr-4 pb-2 pl-4 block flex-row mr-auto ml-auto object-cover w-full"
           alt=""
         />
@@ -108,7 +112,7 @@ const Community = () => {
         <div className="max-w-5xl flex flex-col justify-between pr-4 pl-6 bg-gray-800 mx-auto">
           <div className="items-start flex mb-3 -mt-3">
             <img
-              src={community.image.location}
+              src={community.image?.location}
               className="border-4 border-gray-200 inline-block h-20 w-20"
               alt=""
             />

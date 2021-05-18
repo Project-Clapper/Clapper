@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.post('/create', createCommunity);
 router.get('/find', findCommunityByName);
-router.get('/join', joinCommunity);
+router.post('/join', joinCommunity);
 router.get('/get', getCommunities);
 
 export default router;
