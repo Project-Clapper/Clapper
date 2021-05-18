@@ -1,143 +1,223 @@
-import { ArrowSmDownIcon, ArrowSmUpIcon, ChatAltIcon } from '@heroicons/react/outline';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ArrowSmUpIcon } from '@heroicons/react/outline';
+import { useHistory, useParams } from 'react-router';
+import { getPostFromId } from '../api/post.api';
+import Comment from '../components/Comment';
+import Post from '../components/Post';
+import Spiner from '../components/Spiner';
+import { useSession } from '../contexts/SessionContext';
+import moment from 'moment';
+import { NavLink } from 'react-router-dom';
+import { joinCommunity } from '../api/community.api';
 import '../styles/HomePageStyle.css';
+import { createComment } from '../api/comment.api';
 
 const PostPage = () => {
+  const history = useHistory();
+  const { user } = useSession();
+  const { postTitle } = useParams();
+  const [isLoading, setLoading] = useState(true);
+  const [text, setText] = useState();
+  const [comments, setComment] = useState([]);
+  const [post, setPost] = useState();
+  const [community, setCommunity] = useState();
+
+  useEffect(() => {
+    setLoading(true);
+    const fetchPost = async () => {
+      const { data } = await getPostFromId(postTitle);
+      if (data.comments) setComment(data.comments);
+      setPost(data.post);
+      setCommunity(data.community);
+      setLoading(false);
+    };
+    fetchPost();
+  }, [postTitle]);
+
+  const handleComment = useCallback(
+    async (event) => {
+      event.preventDefault();
+      try {
+        const { postId } = post;
+        const { clientId, username, profileImage } = user;
+        await createComment(postId, text, clientId, username, profileImage);
+        history.go(0);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [history, post, text, user]
+  );
+
+  const handleTextChange = useCallback((event) => {
+    setText(event.target.value);
+  }, []);
+
+  const handleJoinCommunity = useCallback(async () => {
+    try {
+      await joinCommunity(user?.clientId, community?.communityId, community?.name);
+      history.go(0);
+    } catch (error) {
+      console.log(error);
+    }
+  }, [community?.communityId, community?.name, history, user?.clientId]);
+
+  const renderCommunityOptions = () => {
+    const { followers } = community;
+
+    let isMember;
+    followers.forEach((clientId) => {
+      if (clientId === user?.clientId) isMember = true;
+    });
+
+    if (!user)
+      return (
+        <NavLink
+          to="/signin"
+          className="w-full bg-gray-600 text-gray-200 rounded-full flex box-border justify-center text-sm leading-4 h-8 items-center"
+          role="button"
+        >
+          Sign in
+        </NavLink>
+      );
+
+    if (isMember) {
+      return (
+        <NavLink
+          to="/create"
+          className="w-full bg-gray-600 text-gray-200 rounded-full flex box-border justify-center text-sm leading-4 h-8 items-center"
+          role="button"
+        >
+          Create a Post
+        </NavLink>
+      );
+    }
+
+    return (
+      <div
+        type="button"
+        onClick={handleJoinCommunity}
+        className="w-full bg-gray-600 text-gray-200 rounded-full flex box-border justify-center text-sm leading-4 h-8 items-center"
+        role="button"
+      >
+        Join Community
+      </div>
+    );
+  };
+
+  const renderComment = () => {
+    console.log(comments);
+    if (comments.length === 0) return;
+    return comments.map((comment) => {
+      return (
+        <div key={comment.commentId} className="mb-3">
+          <Comment comment={comment} />
+        </div>
+      );
+    });
+  };
+
+  if (isLoading)
+    return (
+      <div className="bg-black h-screen pt-4">
+        <Spiner />
+      </div>
+    );
+
   return (
     <div className="bg-black">
       <div className="container mx-auto content-with-navbar">
         <div className="flex flex-row pt-6">
           <div className="w-2/3 pr-3">
-            <div>
-              <div className="flex bg-gray-800 mb-4 p-2">
-                <span className="py-0 px-4">
-                  <img
-                    className="h-8 w-8 rounded-full"
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    alt=""
-                  />
-                </span>
-                <input
-                  type="text"
-                  className="bg-gray-700 h-9 mr-2 py-0 px-4 w-full"
-                  placeholder="Create Post"
-                />
-              </div>
-
-              <div className="mt-6 border-solid w-full bg-gray-800">
+            <Post post={post} />
+            <div className="">
+              <div className="border-solid w-full bg-gray-800">
                 <div className="flex">
                   <div className="w-10 p-2 bg-gray-800">
-                    <ArrowSmUpIcon className="h-6 w-6 mx-auto text-gray-400 cursor-pointer" />
-                    <p className="text-center text-gray-200">10</p>
-                    <ArrowSmDownIcon className="h-6 w-6 mx-auto text-gray-400 cursor-pointer" />
+                    <ArrowSmUpIcon className="h-6 w-6 mx-auto text-gray-400 cursor-pointer opacity-0" />
                   </div>
-                  <div className="w-full bg-gray-700">
-                    <div className="p-2">
-                      <div className="flex">
-                        <img
-                          className="h-5 w-5 rounded-full"
-                          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                          alt=""
-                        />
-                        <p className="ml-2 text-sm text-gray-400">
-                          <span className="font-semibold underline text-gray-200 cursor-pointer">
-                            s/memes
-                          </span>
-                          <span> - posted by </span>
-                          <span className="underline cursor-pointer">t/whatisusername</span>
-                          <span> 4 hours ago</span>
-                        </p>
-                      </div>
-                      <p className="mt-2 text-gray-100">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium ad natus
-                        nesciunt, aliquid labore assumenda consequuntur mollitia velit neque
-                        corporis sed sint amet sequi eum eligendi voluptatibus doloremque architecto
-                        earum? Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe nulla
-                        eius labore velit reiciendis mollitia consequuntur modi nemo? Atque non
-                        pariatur nostrum quos expedita repellat quibusdam ullam commodi quas
-                        perspiciatis! Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Laudantium ad natus nesciunt, aliquid labore assumenda consequuntur mollitia
-                        velit neque corporis sed sint amet sequi eum eligendi voluptatibus
-                        doloremque architecto earum? Lorem ipsum dolor sit amet consectetur
-                        adipisicing elit. Saepe nulla eius labore velit reiciendis mollitia
-                        consequuntur modi nemo? Atque non pariatur nostrum quos expedita repellat
-                        quibusdam ullam commodi quas perspiciatis!Lorem ipsum dolor sit amet
-                        consectetur adipisicing elit. Laudantium ad natus nesciunt, aliquid labore
-                        assumenda consequuntur mollitia velit neque corporis sed sint amet sequi eum
-                        eligendi voluptatibus doloremque architecto earum? Lorem ipsum dolor sit
-                        amet consectetur adipisicing elit. Saepe nulla eius labore velit reiciendis
-                        mollitia consequuntur modi nemo? Atque non pariatur nostrum quos expedita
-                        repellat quibusdam ullam commodi quas perspiciatis! Lorem ipsum dolor sit
-                        amet consectetur adipisicing elit. Laudantium ad natus nesciunt, aliquid
-                        labore assumenda consequuntur mollitia velit neque corporis sed sint amet
-                        sequi eum eligendi voluptatibus doloremque architecto earum? Lorem ipsum
-                        dolor sit amet consectetur adipisicing elit. Saepe nulla eius labore velit
-                        reiciendis mollitia consequuntur modi nemo? Atque non pariatur nostrum quos
-                        expedita repellat quibusdam ullam commodi quas perspiciatis!
-                      </p>
-                    </div>
-                    <div className="text-sm mt-2 text-gray-400 cursor-pointer hover:bg-gray-300 w-32 pl-2">
-                      <ChatAltIcon className=" inline w-4 h-4 my-auto " />
-                      <p className="ml-1 inline">17 comments</p>
-                    </div>
-                    <div className="mt-6 mr-10 mb-6 ml-12 relative">
-                      <div className="mb-1">
-                        <span className="text-xs font-normal leading-4 text-gray-400 mr-1">
-                          Comment as{' '}
-                          <a className="text-xs font-normal leading-4 text-red-500">
-                            Namesomething
-                          </a>
-                        </span>
-                      </div>
-                      <div className="rounded relative">
-                        <textarea
-                          className="text-gray-200 pt-2 pr-16 pl-4 border-gray-600 resize-y box-border block w-full bg-gray-800 rounded h-9 items-center h-full"
-                          placeholder="Text"
-                        ></textarea>
-                      </div>
-                    </div>
-                    <div className="box-border pr-4 mt-4 mr-4 mb-0 ml-2 pb-4 p-2">
-                      <div>
-                        <div className="relative">
-                          <div className="p-0">
-                            <div>
-                              <div className="pl-4 box-border relative w-full">
-                                <div className="absolute bottom-0 left-0 top-0 z-2">
-                                  <div className="box-border inline-block h-full align-top">
-                                    <div className="h-full bottom-0 absolute box-border inline-block ml-1 align-top w-4"></div>
-                                  </div>
-                                </div>
-                                <div className="mt-4 flex -ml-6 pt-2 pr-1 pb-0 pl-0 relative">
-                                  <div className="self-start inline-block flex-grow-0 flex-shrink-0">
-                                    <div className="flex">
-                                      <img
-                                        className="h-5 w-5 rounded-full"
-                                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                                        alt=""
-                                      />
-                                      <p className="ml-2 text-sm text-gray-400">
-                                        <span className="font-semibold underline text-gray-200 cursor-pointer">
-                                          t/whatisusername
-                                        </span>
-                                        <span> - 4 hours ago</span>
-                                      </p>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                  <div className="w-full bg-gray-700 border-t-2 border-gray-800">
+                    {user && (
+                      <div className="p-2 relative">
+                        <form onSubmit={handleComment}>
+                          <div className="mb-3">
+                            <span className="text-xs ml-auto font-normal leading-4 text-gray-400">
+                              Comment as <span className="text-indigo-300">{user.username}</span>
+                            </span>
                           </div>
-                        </div>
+                          <div className="rounded relative">
+                            <textarea
+                              onChange={handleTextChange}
+                              className="text-gray-200 border-gray-600 resize-y block w-full bg-gray-800 rounded items-center p-3 h-full"
+                              placeholder="Text"
+                              required
+                            />
+                          </div>
+                          <div className="w-full text-right">
+                            <button className="bg-gray-400 p-1 text-xs mt-2 rounded-md text-gray-300">
+                              Comment
+                            </button>
+                          </div>
+                        </form>
                       </div>
-                      <p className="mt-2 text-gray-100">Nice</p>
-                    </div>
+                    )}
+
+                    {renderComment()}
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="w-1/3 pl-3">
-            <div className="bg-gray-800 h-96"></div>
+          <div className="w-1/3 ">
+            <img src={community.banner.location} alt="" className="w-full object-cover h-10" />
+            <div className="bg-gray-800 pl-3">
+              <div className="bg-gray-800 relative">
+                <div className="text-xs font-bold tracking-tighter leading-3 rounded flex text-gray-400 pr-3 pl-3 ">
+                  <div className="text-base font-medium leading-5 pt-3">
+                    <div className="flex">
+                      <img
+                        src={community.image.location}
+                        className="w-8 rounded-full mr-2"
+                        alt=""
+                      />
+                      <h2 className="my-auto text-xl font-medium text-white leading-5 inline">
+                        {community.name}
+                      </h2>
+                    </div>
+                  </div>
+                </div>
+                <div className="pt-3 pr-3 pb-3 pl-3">
+                  <div className="mb-2 relative">
+                    <hr />
+                    <div className="text-sm leading-5 font-normal text-gray-50 pt-2">
+                      {community.description}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-sm font-normal leading-4 flex flex-row text-gray-400 text-center">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 text-gray-400 mr-2"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M21 15.546c-.523 0-1.046.151-1.5.454a2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.704 2.704 0 00-3 0 2.704 2.704 0 01-3 0 2.701 2.701 0 00-1.5-.454M9 6v2m3-2v2m3-2v2M9 3h.01M12 3h.01M15 3h.01M21 21v-7a2 2 0 00-2-2H5a2 2 0 00-2 2v7h18zm-3-9v-2a2 2 0 00-2-2H8a2 2 0 00-2 2v2h12z"
+                        />
+                      </svg>
+                      Created {moment(community.createdAt).format('LL')}
+                    </div>
+                  </div>
+                  <div className="justify-between mt-3 flex flex-row">
+                    <div className="flex-shrink flex-grow">{renderCommunityOptions()}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -8,7 +8,17 @@ import { votePost } from '../api/post.api';
 
 const Post = ({ post }) => {
   const { user, isLoading } = useSession();
-  const { title, body, vote, username, createdAt, postId, profileImage } = post;
+  const {
+    title,
+    body,
+    vote,
+    username,
+    createdAt,
+    postId,
+    profileImage,
+    commentCount,
+    communityName,
+  } = post;
   const [isAlreadtVote, setAlreadyVote] = useState(false);
   const [userVote, setUserVote] = useState('');
   const [upvote, setUpvote] = useState(0);
@@ -16,7 +26,6 @@ const Post = ({ post }) => {
   const location = useLocation();
 
   useMemo(() => {
-    console.log(vote.length);
     if (vote.length === 0) return;
 
     let upvoteNumber = 0;
@@ -98,10 +107,8 @@ const Post = ({ post }) => {
 
   if (isLoading) return <div className="mt-6 border-solid w-full bg-gray-800 h-60"></div>;
 
-  console.log(upvote, downvote);
-
   return (
-    <div className="mb-6 border-solid w-full bg-gray-800">
+    <div className="border-solid w-full bg-gray-800">
       <div className="flex">
         <div className="w-10 p-2 bg-gray-800">
           <ArrowSmUpIcon
@@ -138,7 +145,7 @@ const Post = ({ post }) => {
               <p className="ml-2 text-sm text-gray-400">
                 {!location.pathname.includes('/c/') && (
                   <span className="font-semibold underline text-gray-200 cursor-pointer">
-                    s/memes -
+                    s/{communityName} -
                   </span>
                 )}
                 <span> posted by </span>
@@ -149,11 +156,18 @@ const Post = ({ post }) => {
             <p className="mt-2 text-lg text-gray-100">{title}</p>
             <p className="mt-2 text-gray-100">{body}</p>
           </div>
-          <div className="text-sm mt-2 text-gray-400 cursor-pointer hover:bg-gray-300 w-32 pl-2">
-            <ChatAltIcon className=" inline w-4 h-4 my-auto " />
-            <NavLink to="/post" className="ml-1 inline">
-              17 comments
-            </NavLink>
+          <div className="text-sm mt-2 text-gray-400 cursor-pointer hover:bg-gray-300 w-28 pt-1 pb-1 pl-2">
+            <ChatAltIcon className=" inline w-4 h-4 my-auto" />
+            {location.pathname.includes('/memes/') && (
+              <div className="ml-1 inline">
+                {commentCount} comment{commentCount !== 0 ? 's' : ''}
+              </div>
+            )}
+            {!location.pathname.includes('/memes/') && (
+              <NavLink to={`${communityName}/${postId}`} className="ml-1 inline">
+                {commentCount} comment{commentCount !== 0 ? 's' : ''}
+              </NavLink>
+            )}
           </div>
         </div>
       </div>
