@@ -1,10 +1,11 @@
 import express from 'express';
-import { createPost, votePost, getPostFromId } from '../controllers/post.controller';
+import { createPost, votePost, getPostFromId, getPosts } from '../controllers/post.controller';
 
 const router = express.Router();
 
 router.post('/create', createPost);
 router.post('/vote', votePost);
-router.get('/get', getPostFromId);
+router.get('/getUserPost', getPostFromId);
+router.get('/get', getPosts);
 
 export default router;
