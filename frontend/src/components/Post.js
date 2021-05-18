@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowSmDownIcon, ArrowSmUpIcon, ChatAltIcon } from '@heroicons/react/outline';
 import { NavLink, useLocation } from 'react-router-dom';
 import { useSession } from '../contexts/SessionContext';
@@ -15,8 +15,12 @@ const Post = ({ post }) => {
   const [downvote, setDownvote] = useState(0);
   const location = useLocation();
 
-  useEffect(() => {
+  useMemo(() => {
+    console.log(vote.length);
     if (vote.length === 0) return;
+
+    let upvoteNumber = 0;
+    let downVoteNumber = 0;
 
     vote.forEach((record) => {
       if (user) {
@@ -25,25 +29,31 @@ const Post = ({ post }) => {
           setUserVote(record.vote);
         }
       }
-      if (record.vote === 'upvote') setUpvote(upvote + 1);
-      if (record.vote === 'downvote') setDownvote(downvote - 1);
+      if (record.vote === 'upvote') upvoteNumber += 1;
+      if (record.vote === 'downvote') downVoteNumber += 1;
     });
-  }, [downvote, upvote, user, user?.username, vote]);
 
-  const updateVote = useCallback(() => {
-    try {
-      votePost(postId, user?.clientId, userVote);
-    } catch (error) {
-      console.log(error);
-    }
-  }, [postId, user?.clientId, userVote]);
+    setUpvote(upvoteNumber);
+    setDownvote(downVoteNumber);
+  }, []);
+
+  const updateVote = useCallback(
+    (userVoteString) => {
+      try {
+        votePost(postId, user?.clientId, userVoteString);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    [postId, user?.clientId]
+  );
 
   const handleUpvote = useCallback(async () => {
     if (userVote === 'upvote') {
       setUpvote(upvote - 1);
       setAlreadyVote(false);
       setUserVote('');
-      updateVote();
+      updateVote('');
       return;
     }
 
@@ -51,7 +61,7 @@ const Post = ({ post }) => {
       setUpvote(upvote + 1);
       setAlreadyVote(true);
       setUserVote('upvote');
-      updateVote();
+      updateVote('upvote');
       return;
     }
 
@@ -59,14 +69,15 @@ const Post = ({ post }) => {
     setDownvote(downvote - 1);
     setAlreadyVote(true);
     setUserVote('upvote');
-    updateVote();
-  }, [downvote, upvote, userVote]);
+    updateVote('upvote');
+  }, [downvote, updateVote, upvote, userVote]);
 
   const handleDownvote = useCallback(async () => {
     if (userVote === 'downvote') {
       setDownvote(downvote - 1);
       setAlreadyVote(false);
       setUserVote('');
+      updateVote('');
       return;
     }
 
@@ -74,6 +85,7 @@ const Post = ({ post }) => {
       setDownvote(downvote + 1);
       setAlreadyVote(true);
       setUserVote('downvote');
+      updateVote('downvote');
       return;
     }
 
@@ -81,9 +93,12 @@ const Post = ({ post }) => {
     setDownvote(downvote + 1);
     setAlreadyVote(true);
     setUserVote('downvote');
-  }, [downvote, upvote, userVote]);
+    updateVote('downvote');
+  }, [downvote, updateVote, upvote, userVote]);
 
   if (isLoading) return <div className="mt-6 border-solid w-full bg-gray-800 h-60"></div>;
+
+  console.log(upvote, downvote);
 
   return (
     <div className="mb-6 border-solid w-full bg-gray-800">
