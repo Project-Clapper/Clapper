@@ -132,7 +132,13 @@ const me = async (req, res) => {
       return handleThrow('InvalidTokenException', 'InvalidTokenException', 'Invalid Token.');
 
     jwt.verify(token, pem, { algorithms: ['RS256'] }, async (error, decodedToken) => {
-      if (error) handleThrow('InvalidTokenException', 'InvalidTokenException', 'Invalid Token.');
+      try {
+        if (error) handleThrow('InvalidTokenException', 'InvalidTokenException', 'Invalid Token.');
+      } catch (error) {
+        console.log(error);
+        return res.status(400).json(error);
+      }
+
       const { 'cognito:username': username } = decodedToken;
 
       const params = {
