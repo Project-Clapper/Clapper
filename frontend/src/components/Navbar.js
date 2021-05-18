@@ -75,7 +75,6 @@ const Navbar = () => {
 
   const profileBox = () => {
     if (isLoading) return <div></div>;
-    console.log(user);
     if (user)
       return (
         <>

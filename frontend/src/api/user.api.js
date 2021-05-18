@@ -7,7 +7,6 @@ const userCommunities = (clientId) => {
 };
 
 const updateUser = (clientId, profileImage, bannerImage) => {
-  console.log(clientId, profileImage, bannerImage);
   return axios.post(`${api_endpoint}user/update`, { clientId, profileImage, bannerImage });
 };
 

@@ -1,17 +1,11 @@
-import {
-  ArrowSmDownIcon,
-  ArrowSmUpIcon,
-  ChatAltIcon,
-  SearchCircleIcon,
-  SearchIcon,
-} from '@heroicons/react/outline';
+import { ArrowSmDownIcon, ArrowSmUpIcon, ChatAltIcon } from '@heroicons/react/outline';
 import React, { useState } from 'react';
 import '../styles/HomePageStyle.css';
 import { NavLink } from 'react-router-dom';
 
-import { Fragment } from 'react';
-import { Listbox, Transition } from '@headlessui/react';
-import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
+// import { Fragment } from 'react';
+// import { Listbox, Transition } from '@headlessui/react';
+// import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
 
 const HomePage = () => {
   return (

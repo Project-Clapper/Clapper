@@ -4,7 +4,6 @@ import { createPost } from '../api/post.api';
 import { userCommunities } from '../api/user.api';
 import Spiner from '../components/Spiner';
 import { useSession } from '../contexts/SessionContext';
-import useModal from '../hooks/useModal';
 
 const CreatePage = () => {
   const history = useHistory();

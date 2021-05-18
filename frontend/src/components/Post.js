@@ -33,8 +33,8 @@ const Post = ({ post }) => {
   const updateVote = useCallback(() => {
     try {
       votePost(postId, user?.clientId, userVote);
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.log(error);
     }
   }, [postId, user?.clientId, userVote]);
 

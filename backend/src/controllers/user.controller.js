@@ -19,7 +19,6 @@ const userCommunities = async (req, res) => {
 const updateUser = async (req, res) => {
   try {
     const { clientId, profileImage, bannerImage } = req.body;
-    console.log(clientId);
     const params = {
       TableName: 'ClapperUser',
       Key: { clientId },
