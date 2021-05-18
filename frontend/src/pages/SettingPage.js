@@ -93,8 +93,8 @@ const SettingPage = () => {
                           src={
                             image
                               ? URL.createObjectURL(image)
-                              : user?.profileImage.location
-                              ? user?.profileImage.location
+                              : user?.profileImage?.location
+                              ? user?.profileImage?.location
                               : 'https://via.placeholder.com/240'
                           }
                           className="object-cover h-28 w-full"
@@ -137,8 +137,8 @@ const SettingPage = () => {
                           src={
                             banner
                               ? URL.createObjectURL(banner)
-                              : user?.bannerImage.location
-                              ? user?.bannerImage.location
+                              : user?.bannerImage?.location
+                              ? user?.bannerImage?.location
                               : 'https://via.placeholder.com/240'
                           }
                           className="object-cover h-28 w-full"
