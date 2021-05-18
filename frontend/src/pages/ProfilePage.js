@@ -1,14 +1,41 @@
-import { ArrowSmDownIcon, ArrowSmUpIcon, ChatAltIcon } from '@heroicons/react/outline';
-import { UserIcon } from '@heroicons/react/solid';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import Spiner from '../components/Spiner';
+import Post from '../components/Post';
+import { UserIcon } from '@heroicons/react/solid';
+import { Link } from 'react-router-dom';
+import { getUserPost } from '../api/user.api';
 import { useSession } from '../contexts/SessionContext';
 
 const ProfilePage = () => {
   const { user, isLoading } = useSession();
+  const [isLoadPost, setLoadPost] = useState();
+  const [posts, setPosts] = useState([]);
 
-  if (isLoading)
+  useEffect(() => {
+    setLoadPost(true);
+    const fetchPosts = async () => {
+      try {
+        const { data } = await getUserPost(user?.clientId);
+        setPosts(data);
+      } catch (error) {
+        console.log(error);
+      }
+      setLoadPost(false);
+    };
+    if (user) fetchPosts();
+  }, [setLoadPost, user]);
+
+  const renderPost = () => {
+    return posts.map((post) => {
+      return (
+        <div key={post.postId} className="mb-2">
+          <Post post={post} />
+        </div>
+      );
+    });
+  };
+
+  if (isLoading || isLoadPost)
     return (
       <div className="bg-black h-screen pt-4">
         <Spiner />
@@ -19,7 +46,7 @@ const ProfilePage = () => {
     <div className="bg-black">
       <div className="container mx-auto content-with-navbar">
         <div className="flex flex-row pt-6">
-          <div className="w-2/3 pr-3"></div>
+          <div className="w-2/3 pr-3">{renderPost()}</div>
           <div className="w-1/3 pl-3">
             <div className="bg-gray-800 relative z-0">
               <div className="rounded overflow-visible break-words p-3">

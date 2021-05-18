@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { ArrowSmDownIcon, ArrowSmUpIcon, ChatAltIcon } from '@heroicons/react/outline';
-import { NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useSession } from '../contexts/SessionContext';
 import { UserIcon } from '@heroicons/react/solid';
 import moment from 'moment';
@@ -48,13 +48,15 @@ const Post = ({ post }) => {
 
   const updateVote = useCallback(
     (userVoteString) => {
-      try {
-        votePost(postId, user?.clientId, userVoteString);
-      } catch (error) {
-        console.log(error);
+      if (user) {
+        try {
+          votePost(postId, user?.clientId, userVoteString);
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
-    [postId, user?.clientId]
+    [postId, user]
   );
 
   const handleUpvote = useCallback(async () => {
@@ -144,9 +146,11 @@ const Post = ({ post }) => {
               {!profileImage?.location && <UserIcon className="h-5 w-5 rounded-full" />}
               <p className="ml-2 text-sm text-gray-400">
                 {!location.pathname.includes('/c/') && (
-                  <span className="font-semibold underline text-gray-200 cursor-pointer">
-                    s/{communityName} -
-                  </span>
+                  <Link to={`c/${communityName}`}>
+                    <span className="font-semibold underline text-gray-200 cursor-pointer">
+                      s/{communityName} -
+                    </span>
+                  </Link>
                 )}
                 <span> posted by </span>
                 <span className="underline cursor-pointer">t/{username}</span>
@@ -158,13 +162,13 @@ const Post = ({ post }) => {
           </div>
           <div className="text-sm mt-2 text-gray-400 cursor-pointer hover:bg-gray-300 w-28 pt-1 pb-1 pl-2">
             <ChatAltIcon className=" inline w-4 h-4 my-auto" />
-            {location.pathname.includes('/memes/') && (
+            {location.pathname.includes(`/${communityName}/`) && (
               <div className="ml-1 inline">
                 {commentCount} comment{commentCount !== 0 ? 's' : ''}
               </div>
             )}
             {!location.pathname.includes('/memes/') && (
-              <NavLink to={`${communityName}/${postId}`} className="ml-1 inline">
+              <NavLink to={`c/${communityName}/${postId}`} className="ml-1 inline">
                 {commentCount} comment{commentCount !== 0 ? 's' : ''}
               </NavLink>
             )}
