@@ -1,5 +1,6 @@
 // tailwind.config.js
 const colors = require('tailwindcss/colors');
+const forms = require('@tailwindcss/forms');
 
 module.exports = {
   purge: ['./src/**/*.{js,jsx,ts,tsx}', './public/index.html'],
@@ -20,10 +21,11 @@ module.exports = {
       indigo: colors.indigo,
       red: colors.rose,
       yellow: colors.amber,
+      green: colors.green,
     },
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [forms],
 };
