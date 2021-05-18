@@ -10,6 +10,7 @@ import CreatePage from './pages/CreatePage';
 import CommunityPage from './pages/CommunityPage';
 import PostPage from './pages/PostPage';
 import Community from './pages/Community';
+import CommunitiesPage from './pages/CommunitiesPage';
 import './App.css';
 
 const App = () => {
@@ -19,6 +20,9 @@ const App = () => {
       <Switch>
         <Route exact path="/">
           <HomePage />
+        </Route>
+        <Route exact path="/community">
+          <CommunitiesPage />
         </Route>
         <Route exact path="/signin">
           <SignInPage />
@@ -41,7 +45,7 @@ const App = () => {
         <Route exact path="/post">
           <PostPage />
         </Route>
-        <Route exact path="/community">
+        <Route path="/c">
           <Community />
         </Route>
       </Switch>
