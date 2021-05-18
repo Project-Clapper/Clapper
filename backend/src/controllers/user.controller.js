@@ -1,5 +1,23 @@
 import { dynamoClient } from '../config/dynamodb.config';
 
+const userPost = async (req, res) => {
+  try {
+    const { clientId } = req.query;
+    const params = {
+      TableName: 'ClapperPost',
+      FilterExpression: 'createdBy = :value',
+      ExpressionAttributeValues: {
+        ':value': clientId,
+      },
+    };
+    const { Items: post } = await dynamoClient.scan(params).promise();
+    res.status(200).json(post);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json(error);
+  }
+};
+
 const userCommunities = async (req, res) => {
   try {
     const { clientId } = req.query;
@@ -36,4 +54,4 @@ const updateUser = async (req, res) => {
   }
 };
 
-export { userCommunities, updateUser };
+export { userCommunities, updateUser, userPost };
