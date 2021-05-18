@@ -112,7 +112,7 @@ const Post = ({ post }) => {
   return (
     <div className="border-solid w-full bg-gray-800">
       <div className="flex">
-        <div className="w-10 p-2 bg-gray-800">
+        <div className="w-12 p-2 bg-gray-800">
           <ArrowSmUpIcon
             onClick={handleUpvote}
             className={
