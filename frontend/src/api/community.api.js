@@ -12,4 +12,12 @@ const createCommunity = (name, description, image, banner, createdBy) => {
   });
 };
 
-export { createCommunity };
+const getCommunities = () => {
+  return axios.get(`${api_endpoint}community/get`);
+};
+
+const getCommunityByName = (name) => {
+  return axios.get(`${api_endpoint}community/find?name=${name}`);
+};
+
+export { createCommunity, getCommunities, getCommunityByName };
