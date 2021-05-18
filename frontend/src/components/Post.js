@@ -158,13 +158,20 @@ const Post = ({ post }) => {
           </div>
           <div className="text-sm mt-2 text-gray-400 cursor-pointer hover:bg-gray-300 w-28 pt-1 pb-1 pl-2">
             <ChatAltIcon className=" inline w-4 h-4 my-auto" />
-            {location.pathname.includes('/memes/') && (
+            {location.pathname.includes(`/${communityName}/`) && (
               <div className="ml-1 inline">
                 {commentCount} comment{commentCount !== 0 ? 's' : ''}
               </div>
             )}
-            {!location.pathname.includes('/memes/') && (
-              <NavLink to={`${communityName}/${postId}`} className="ml-1 inline">
+            {!location.pathname.includes(`/${communityName}/`) && (
+              <NavLink
+                to={
+                  location.pathname.includes('/c')
+                    ? `${communityName}/${postId}`
+                    : `c/${communityName}/${postId}`
+                }
+                className="ml-1 inline"
+              >
                 {commentCount} comment{commentCount !== 0 ? 's' : ''}
               </NavLink>
             )}
