@@ -21,7 +21,7 @@ const getCommunityByName = (name) => {
 };
 
 const joinCommunity = (clientId, communityId, communityName) => {
-  return axios.post(`${api_endpoint}community/join}`, { clientId, communityId, communityName });
+  return axios.post(`${api_endpoint}community/join`, { clientId, communityId, communityName });
 };
 
 export { createCommunity, getCommunities, getCommunityByName, joinCommunity };
