@@ -6,6 +6,7 @@ import imageRouter from './routes/image.route';
 import communityRouter from './routes/commnity.route';
 import postRouter from './routes/post.route';
 import userRouter from './routes/user.route';
+import commentRouter from './routes/comment.route';
 
 const app = express();
 const port = process.env.PORT;
@@ -24,6 +25,7 @@ app.use('/image', imageRouter);
 app.use('/community', communityRouter);
 app.use('/post', postRouter);
 app.use('/user', userRouter);
+app.use('/comment', commentRouter);
 
 app.get('/', (req, res) => {
   res.send('Hello World!!');
