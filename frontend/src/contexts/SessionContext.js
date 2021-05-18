@@ -60,7 +60,10 @@ export const SessionProvider = ({ children }) => {
       try {
         const { data: user } = await me(token);
         setUser(user);
-      } catch ({ message }) {}
+      } catch ({ message }) {
+        removeCookie('token', { maxAge: 86400 });
+        setUser(null);
+      }
       setLoading(false);
     };
     queryMe();
