@@ -23,7 +23,7 @@ const createCommunity = async (req, res) => {
       description,
       image,
       banner,
-      followers: 0,
+      followers: [createdBy],
       createdBy,
       createdAt: new Date().toISOString(),
     };
@@ -61,7 +61,6 @@ const createCommunity = async (req, res) => {
 const findCommunityByName = async (req, res) => {
   try {
     const { name } = req.query;
-    console.log(name);
 
     const params = {
       TableName: 'ClapperCommunity',
@@ -102,13 +101,14 @@ const findCommunityByName = async (req, res) => {
 
 const joinCommunity = async (req, res) => {
   try {
-    const { clientId, username, profileImage, communityId } = req.body;
+    const { clientId, communityId, communityName } = req.body;
 
+    // add to community table
     const user = {
       clientId,
-      username,
-      profileImage,
-      joinAt: new Date().toISOString(),
+      // username,
+      // profileImage,
+      // joinAt: new Date().toISOString(),
     };
 
     const params = {
@@ -119,8 +119,23 @@ const joinCommunity = async (req, res) => {
         ':attrValue': [user],
       },
     };
-
     await dynamoClient.update(params).promise();
+
+    // add to user table
+    const params2 = {
+      TableName: 'ClapperUser',
+      Key: { clientId },
+      UpdateExpression: 'SET communities = list_append(communities, :attrValue)',
+      ExpressionAttributeValues: {
+        ':attrValue': [
+          {
+            communityId,
+            name: communityName,
+          },
+        ],
+      },
+    };
+    await dynamoClient.update(params2).promise();
     res.sendStatus(200);
   } catch (error) {
     res.status(400).json(error);

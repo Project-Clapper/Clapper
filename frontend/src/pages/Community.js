@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { getCommunityByName } from '../api/community.api';
 import Post from '../components/Post';
 import Spiner from '../components/Spiner';
+import { useSession } from '../contexts/SessionContext';
 import '../styles/HomePageStyle.css';
 
 const Community = () => {
-  const [isLoading, setLoading] = useState(true);
+  const { user, isLoading } = useSession();
+  const [isLoadCommunity, setLoadCommunity] = useState(true);
   const [community, setCommunity] = useState();
   const [posts, setPosts] = useState();
   const location = useLocation();
@@ -20,26 +22,72 @@ const Community = () => {
       );
 
     return posts.map((post) => {
-      return <Post post={post} />;
+      return <Post key={post.postId} post={post} />;
     });
+  };
+
+  const handleJoinCommunity = useCallback(() => {
+    console.log(1);
+  }, []);
+
+  const renderCommunityOptions = () => {
+    const { followers } = community;
+
+    let isMember;
+    followers.forEach((clientId) => {
+      if (clientId === user.clientId) isMember = true;
+    });
+
+    if (!user)
+      return (
+        <NavLink
+          to="/signin"
+          className="w-full bg-gray-600 text-gray-200 rounded-full flex box-border justify-center text-sm leading-4 h-8 items-center"
+          role="button"
+        >
+          Sign in
+        </NavLink>
+      );
+
+    if (isMember) {
+      return (
+        <NavLink
+          to="/create"
+          className="w-full bg-gray-600 text-gray-200 rounded-full flex box-border justify-center text-sm leading-4 h-8 items-center"
+          role="button"
+        >
+          Create a Post
+        </NavLink>
+      );
+    }
+
+    return (
+      <div
+        type="button"
+        onClick={handleJoinCommunity}
+        className="w-full bg-gray-600 text-gray-200 rounded-full flex box-border justify-center text-sm leading-4 h-8 items-center"
+        role="button"
+      >
+        Join Community
+      </div>
+    );
   };
 
   useEffect(() => {
     const { pathname } = location;
     const communityName = pathname.slice(3, pathname.length);
 
-    setLoading(true);
+    setLoadCommunity(true);
     const fetchCommunity = async () => {
       const { data } = await getCommunityByName(communityName);
       setCommunity(data.community);
       setPosts(data.posts);
-      console.log(data);
-      setLoading(false);
+      setLoadCommunity(false);
     };
     fetchCommunity();
   }, [location]);
 
-  if (isLoading) {
+  if (isLoadCommunity || isLoading) {
     return (
       <div className="bg-black h-screen pt-4">
         <Spiner />
@@ -196,15 +244,7 @@ const Community = () => {
                   </div>
                 </div>
                 <div className="justify-between mt-3 flex flex-row">
-                  <div className="flex-shrink flex-grow">
-                    <NavLink
-                      to="/create"
-                      className="w-full bg-gray-600 text-gray-200 rounded-full flex box-border justify-center text-sm leading-4 h-8 items-center"
-                      role="button"
-                    >
-                      Create a Post
-                    </NavLink>
-                  </div>
+                  <div className="flex-shrink flex-grow">{renderCommunityOptions()}</div>
                 </div>
               </div>
             </div>

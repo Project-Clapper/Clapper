@@ -10,7 +10,7 @@ const CommunitiesPage = () => {
   const renderCommunities = () => {
     return communities.map((community) => {
       return (
-        <div className="bg-gray-800 p-5 cursor-pointer rounded w-full">
+        <div key={community.communityId} className="bg-gray-800 p-5 cursor-pointer rounded w-full">
           <Link to={`c/${community.name}`}>
             <div className="flex">
               <img src={community.image.location} className="w-20 my-auto rounded" alt="" />
@@ -47,6 +47,11 @@ const CommunitiesPage = () => {
     <div className="bg-black h-screen text-white">
       <div className="container mx-auto">
         <div className="pt-5 flex">{renderCommunities()}</div>
+        <Link to="/create-community">
+          <div className="mt-5 mb-5 p-5 bg-gray-700 w-56 text-center mx-auto rounded">
+            <p className="">Create Communitiy</p>
+          </div>
+        </Link>
       </div>
     </div>
   );
