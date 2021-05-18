@@ -30,7 +30,7 @@ const ProfilePage = () => {
                         <span className="h-full w-full">
                           {user?.bannerImage?.location && (
                             <img
-                              className="h-8 w-8 rounded-full object-cover"
+                              className="h-28 w-full object-cover"
                               src={user?.bannerImage?.location}
                               alt=""
                             />
