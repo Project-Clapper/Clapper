@@ -32,14 +32,14 @@ const Community = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [community?.communityId, community?.name, user.clientId]);
+  }, [community?.communityId, community?.name, user?.clientId]);
 
   const renderCommunityOptions = () => {
     const { followers } = community;
 
     let isMember;
     followers.forEach((clientId) => {
-      if (clientId === user.clientId) isMember = true;
+      if (clientId === user?.clientId) isMember = true;
     });
 
     if (!user)

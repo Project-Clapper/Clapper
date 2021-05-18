@@ -52,7 +52,13 @@ const CommunityPage = () => {
       try {
         const { data: imageURL } = await uploadImage(image);
         const { data: bannerURL } = await uploadImage(banner);
-        const result = await createCommunity(name, description, imageURL, bannerURL, user.clientId);
+        const result = await createCommunity(
+          name,
+          description,
+          imageURL,
+          bannerURL,
+          user?.clientId
+        );
         if (result) history.push(`c/${name}`);
       } catch (error) {
         handleErrorMessage('Plase try again', error.message);
