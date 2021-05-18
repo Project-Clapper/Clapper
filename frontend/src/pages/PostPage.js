@@ -133,9 +133,11 @@ const PostPage = () => {
             <div className="">
               <div className="border-solid w-full bg-gray-800">
                 <div className="flex">
-                  <div className="w-10 p-2 bg-gray-800">
-                    <ArrowSmUpIcon className="h-6 w-6 mx-auto text-gray-400 cursor-pointer opacity-0" />
-                  </div>
+                  {comments.length > 0 && (
+                    <div className="w-10 p-2 bg-gray-800">
+                      <ArrowSmUpIcon className="h-6 w-6 mx-auto text-gray-400 cursor-pointer opacity-0" />
+                    </div>
+                  )}
                   <div className="w-full bg-gray-700 border-t-2 border-gray-800">
                     {user && (
                       <div className="p-2 relative">
@@ -161,9 +163,8 @@ const PostPage = () => {
                         </form>
                       </div>
                     )}
-
-                    {renderComment()}
                   </div>
+                  {renderComment()}
                 </div>
               </div>
             </div>
