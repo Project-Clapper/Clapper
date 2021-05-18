@@ -102,7 +102,7 @@ const ProfilePage = () => {
                   )}
                 </div>
                 <p className="text-xs font-medium leading-4 text-white mt-3">t/{user?.username}</p>
-                <div className="flex flex-wrap mt-5">
+                {/* <div className="flex flex-wrap mt-5">
                   <div className="flex-grow flex-shrink">
                     <h5 className="font-medium text-sm leading-4 text-gray-200">Clap Day</h5>
                     <div className="items-center flex mt-1">
@@ -125,7 +125,7 @@ const ProfilePage = () => {
                       </span>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="justify-between mt-3 flex flex-row">
                   <div className="flex-shrink flex-grow">
                     <Link
