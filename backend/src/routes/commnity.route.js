@@ -1,0 +1,16 @@
+import express from 'express';
+import {
+  createCommunity,
+  findCommunityByName,
+  getCommunities,
+  joinCommunity,
+} from '../controllers/comunity.controller';
+
+const router = express.Router();
+
+router.post('/create', createCommunity);
+router.get('/find', findCommunityByName);
+router.post('/join', joinCommunity);
+router.get('/get', getCommunities);
+
+export default router;
